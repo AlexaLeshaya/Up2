@@ -28,7 +28,7 @@ with st.sidebar:
     st.header('Введите характеристики сотрудника')
     satisfaction_level = st.slider('Уровень удовлетворенности сотрудника', 0.0, 1.0, 0.5)
     last_evaluation = st.slider('Последняя оценка компанией', 0.0, 1.0, 0.7)
-    number_project = st.slider('Количество проектов', 2, 7, 4)
+    number_project = st.slider('Количество проектов', 1, 7, 4)
     average_montly_hours = st.slider('Среднее количество рабочих часов', 96, 310, 200)
     time_spend_company = st.slider('Время в компании (лет)', 1, 10, 3)
     Work_accident = st.selectbox('Происходил ли несчастный случай на работе?', (0, 1))
