@@ -22,7 +22,7 @@ y = hr_data_encoded['left']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
 # Обучение модели RandomForestClassifier
-rfc = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=-1, random_state=1)
+rfc = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=-1, random_state=42)
 rfc.fit(X_train, y_train)
 
 # Сохраним модель в новом формате
