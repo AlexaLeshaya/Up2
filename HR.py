@@ -26,7 +26,7 @@ rfc = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=-1, ran
 rfc.fit(X_train, y_train)
 
 # Сохраним модель в новом формате
-new_model_path = '/mnt/data/HR.pkl'
+new_model_path = 'HR.pkl'
 with open(new_model_path, 'wb') as model_file:
     pickle.dump(rfc, model_file)
 
