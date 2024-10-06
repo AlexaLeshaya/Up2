@@ -129,7 +129,7 @@ def main():
         sales=3
         
         
-    result=""
+    result={}
     if st.button("Predict"):
         result=int(predict_employee_turnover(satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, Work_accident, promotion_last_5years, salary, sales))
     
