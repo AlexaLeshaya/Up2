@@ -1,53 +1,86 @@
-import numpy as np
-import pickle
-import pandas as pd
 import streamlit as st
-from PIL import Image
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 
-# Загрузка модели
-pickle_in = open("HR.pkl", "rb")
-rfc = pickle.load(pickle_in)
+st.title('👀 Прогноз увольнения сотрудников')
 
-# Функция предсказания
-def predict_employee_turnover(satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, Work_accident, promotion_last_5years, salary, sales):
-    prediction = rfc.predict([[satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, Work_accident, promotion_last_5years, salary, sales]])
-    return prediction
+# Загрузка данных
+with st.expander('Исходные данные'):
+    df = pd.read_csv('HR.csv')
+  
+    st.write('**X**')
+    X_raw = df.drop('left', axis=1)  # 'left' - целевая переменная (увольнение)
+    X_raw
 
-# Основная функция приложения
-def main():
-    st.title("Прогнозирование текучести кадров в компании")
+    st.write('**y**')
+    y_raw = df['left']
+    y_raw
 
-    st.markdown(
-        """
-        <div style="background-color:maroon; padding:10px">
-        <h2 style="color:white;text-align:center;">Forecasting employee turnover in the company. Based on data from kaggle.com, algorithm RandomForest</h2>
-        </div>
-        """, unsafe_allow_html=True
-    )
+# Визуализация данных
+with st.expander('Визуализация данных'):
+    st.scatter_chart(data=df, x='satisfaction_level', y='average_montly_hours', color='left')
+    st.bar_chart(data=df['salary'].value_counts())
 
-    # Ввод данных
-    satisfaction_level = st.slider("Уровень удовлетворенности сотрудника (0.1 - 1.0)", 0.1, 1.0, 0.5)
-    last_evaluation = st.slider("Оценка работодателя (0.1 - 1.0)", 0.1, 1.0, 0.5)
-    number_project = st.number_input("Количество проектов", min_value=1, max_value=10, value=3)
-    average_montly_hours = st.number_input("Среднее количество часов в месяц", min_value=80, max_value=320, value=160)
-    time_spend_company = st.number_input("Количество лет в компании", min_value=1, max_value=10, value=3)
-    Work_accident = st.selectbox("Происшествия на рабочем месте", ("Нет", "Да"))
-    promotion_last_5years = st.selectbox("Продвижение за последние 5 лет", ("Нет", "Да"))
-    salary = st.selectbox("Уровень заработной платы", ("Низкий", "Средний", "Высокий"))
-    sales = st.selectbox("Отдел", ["Отдел продаж", "Технический", "Поддержка", "Управление", "Маркетинг", "РандД", "Аккаунтинг", "HR", "ИТ"])
+# Пользовательские параметры
+with st.sidebar:
+    st.header('Введите характеристики сотрудника')
+    satisfaction_level = st.slider('Уровень удовлетворенности', 0.0, 1.0, 0.5)
+    last_evaluation = st.slider('Последняя оценка', 0.0, 1.0, 0.7)
+    number_project = st.slider('Количество проектов', 2, 7, 4)
+    average_montly_hours = st.slider('Среднее количество рабочих часов', 96, 310, 200)
+    time_spend_company = st.slider('Время в компании (лет)', 2, 10, 3)
+    Work_accident = st.selectbox('Происходил ли несчастный случай на работе?', (0, 1))
+    promotion_last_5years = st.selectbox('Повышение за последние 5 лет?', (0, 1))
+    sales = st.selectbox('Отдел', df['sales'].unique())
+    salary = st.selectbox('Уровень зарплаты', df['salary'].unique())
+  
+    # Собираем вводные данные в DataFrame
+    data = {'satisfaction_level': satisfaction_level,
+            'last_evaluation': last_evaluation,
+            'number_project': number_project,
+            'average_montly_hours': average_montly_hours,
+            'time_spend_company': time_spend_company,
+            'Work_accident': Work_accident,
+            'promotion_last_5years': promotion_last_5years,
+            'sales': sales,
+            'salary': salary}
+    input_df = pd.DataFrame(data, index=[0])
 
-    # Преобразование данных
-    Work_accident = 1 if Work_accident == "Да" else 0
-    promotion_last_5years = 1 if promotion_last_5years == "Да" else 0
-    salary_map = {"Низкий": 0, "Средний": 1, "Высокий": 2}
-    salary = salary_map[salary]
-    sales_map = {"Отдел продаж": 0, "Технический": 1, "Поддержка": 2, "Управление": 3, "Маркетинг": 4, "РандД": 5, "Аккаунтинг": 6, "HR": 7, "ИТ": 8}
-    sales = sales_map[sales]
+    # Объединяем с исходными данными для корректного кодирования
+    input_data = pd.concat([input_df, X_raw], axis=0)
 
-    # Кнопка предсказания
-    if st.button("Предсказать"):
-        result = predict_employee_turnover(satisfaction_level, last_evaluation, number_project, average_montly_hours, time_spend_company, Work_accident, promotion_last_5years, salary, sales)
-        st.success(f'Прогноз: {"Сотрудник уволится" if result[0] == 1 else "Сотрудник останется"}')
+# Кодирование категориальных переменных
+encode = ['sales', 'salary']
+input_data_encoded = pd.get_dummies(input_data, columns=encode)
 
-if __name__ == '__main__':
-    main()
+# Отделяем строку с вводом пользователя
+X_input = input_data_encoded[:1]
+
+# Обработка категориальных переменных для основного набора данных
+df_encoded = pd.get_dummies(X_raw, columns=encode)
+
+# Разделение данных на обучающую и тестовую выборки
+X = df_encoded
+y = y_raw
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Обучение модели RandomForestClassifier
+clf = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=2, random_state=1)
+clf.fit(X_train, y_train)
+
+# Прогнозирование
+prediction = clf.predict(X_input)
+prediction_proba = clf.predict_proba(X_input)
+
+# Отображение результата
+st.subheader('Вероятность увольнения')
+df_prediction_proba = pd.DataFrame(prediction_proba, columns=['Останется', 'Уволится'])
+st.dataframe(df_prediction_proba)
+
+# Вывод результата
+if prediction[0] == 1:
+    st.success("Сотрудник, вероятно, уволится.")
+else:
+    st.success("Сотрудник, вероятно, останется.")
