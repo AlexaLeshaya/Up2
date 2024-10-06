@@ -66,8 +66,8 @@ X = df_encoded
 y = y_raw
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Обучение модели RandomForestClassifier
-clf = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=2, random_state=1)
+# Обучение модели RandomForestClassifier с корректным параметром max_features
+clf = RandomForestClassifier(n_estimators=7, max_features='sqrt', n_jobs=2, random_state=1)
 clf.fit(X_train, y_train)
 
 # Прогнозирование
