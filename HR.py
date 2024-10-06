@@ -19,14 +19,14 @@ X = hr_data_encoded.drop(columns=['left'])
 y = hr_data_encoded['left']
 
 # Разделение на обучающую и тестовую выборки
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
 # Обучение модели RandomForestClassifier
-rfc = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=2, random_state=1)
+rfc = RandomForestClassifier(n_estimators=7, max_features='auto', n_jobs=-1, random_state=1)
 rfc.fit(X_train, y_train)
 
 # Сохраним модель в новом формате
-new_model_path = '/mnt/data/HR_new.pkl'
+new_model_path = '/mnt/data/HR.pkl'
 with open(new_model_path, 'wb') as model_file:
     pickle.dump(rfc, model_file)
 
