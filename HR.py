@@ -26,11 +26,11 @@ with st.expander('Визуализация данных'):
 # Пользовательские параметры
 with st.sidebar:
     st.header('Введите характеристики сотрудника')
-    satisfaction_level = st.slider('Уровень удовлетворенности', 0.0, 1.0, 0.5)
-    last_evaluation = st.slider('Последняя оценка', 0.0, 1.0, 0.7)
+    satisfaction_level = st.slider('Уровень удовлетворенности сотрудника', 0.0, 1.0, 0.5)
+    last_evaluation = st.slider('Последняя оценка компанией', 0.0, 1.0, 0.7)
     number_project = st.slider('Количество проектов', 2, 7, 4)
     average_montly_hours = st.slider('Среднее количество рабочих часов', 96, 310, 200)
-    time_spend_company = st.slider('Время в компании (лет)', 2, 10, 3)
+    time_spend_company = st.slider('Время в компании (лет)', 1, 10, 3)
     Work_accident = st.selectbox('Происходил ли несчастный случай на работе?', (0, 1))
     promotion_last_5years = st.selectbox('Повышение за последние 5 лет?', (0, 1))
     sales = st.selectbox('Отдел', df['sales'].unique())
