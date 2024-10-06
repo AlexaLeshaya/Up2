@@ -2,6 +2,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 import pickle
+import pandas as pd
+
+data = pd.read_csv('HR.csv')
 
 # Обработка категориальных переменных
 hr_data_encoded = data.copy()
