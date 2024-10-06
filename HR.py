@@ -4,7 +4,7 @@ from sklearn.preprocessing import LabelEncoder
 import pickle
 
 # Обработка категориальных переменных
-hr_data_encoded = hr_data.copy()
+hr_data_encoded = data.copy()
 label_encoder = LabelEncoder()
 
 # Преобразуем категориальные переменные 'sales' и 'salary' в числовые
