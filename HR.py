@@ -31,12 +31,12 @@ with st.sidebar:
     number_project = st.slider('Количество проектов', 1, 7, 4)
     average_montly_hours = st.slider('Среднее количество рабочих часов', 96, 310, 200)
     time_spend_company = st.slider('Время в компании (лет)', 1, 10, 3)
+    gender = st.selectbox('Пол сотрудника', ('Male', 'Female'))  # Новый выбор
     Work_accident = st.selectbox('Происходил ли несчастный случай на работе?', (0, 1))
     promotion_last_5years = st.selectbox('Повышение за последние 5 лет?', (0, 1))
     sales = st.selectbox('Отдел', df['sales'].unique())
     salary = st.selectbox('Уровень зарплаты', df['salary'].unique())
-    gender = st.selectbox('Пол сотрудника', ('Male', 'Female'))  # Новый выбор
-
+    
     # Собираем вводные данные в DataFrame
     data = {'satisfaction_level': satisfaction_level,
             'last_evaluation': last_evaluation,
