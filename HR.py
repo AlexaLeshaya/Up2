@@ -35,7 +35,8 @@ with st.sidebar:
     promotion_last_5years = st.selectbox('Повышение за последние 5 лет?', (0, 1))
     sales = st.selectbox('Отдел', df['sales'].unique())
     salary = st.selectbox('Уровень зарплаты', df['salary'].unique())
-  
+    gender = st.selectbox('Пол сотрудника', ('Male', 'Female'))  # Новый выбор
+
     # Собираем вводные данные в DataFrame
     data = {'satisfaction_level': satisfaction_level,
             'last_evaluation': last_evaluation,
@@ -45,14 +46,15 @@ with st.sidebar:
             'Work_accident': Work_accident,
             'promotion_last_5years': promotion_last_5years,
             'sales': sales,
-            'salary': salary}
+            'salary': salary,
+            'gender': gender}  # Добавлен пол
     input_df = pd.DataFrame(data, index=[0])
 
     # Объединяем с исходными данными для корректного кодирования
     input_data = pd.concat([input_df, X_raw], axis=0)
 
 # Кодирование категориальных переменных
-encode = ['sales', 'salary']
+encode = ['sales', 'salary', 'gender']  # Учтён пол
 input_data_encoded = pd.get_dummies(input_data, columns=encode)
 
 # Отделяем строку с вводом пользователя
