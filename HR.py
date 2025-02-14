@@ -46,7 +46,7 @@ with st.sidebar:
             'Work_accident': Work_accident,
             'promotion_last_5years': promotion_last_5years,
             'sales': sales,
-            'salary': salary,
+            'salary': salary}
             #'gender': gender}  # Добавлен пол
     input_df = pd.DataFrame(data, index=[0])
 
