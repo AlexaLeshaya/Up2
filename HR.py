@@ -54,7 +54,7 @@ with st.sidebar:
     input_data = pd.concat([input_df, X_raw], axis=0)
 
 # Кодирование категориальных переменных
-encode = ['sales', 'salary', 'gender']  # Учтён пол
+encode = ['sales', 'salary']  # Учтён пол
 input_data_encoded = pd.get_dummies(input_data, columns=encode)
 
 # Отделяем строку с вводом пользователя
