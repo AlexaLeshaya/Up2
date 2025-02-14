@@ -47,7 +47,7 @@ with st.sidebar:
             'promotion_last_5years': promotion_last_5years,
             'sales': sales,
             'salary': salary,
-            'gender': gender}  # Добавлен пол
+            #'gender': gender}  # Добавлен пол
     input_df = pd.DataFrame(data, index=[0])
 
     # Объединяем с исходными данными для корректного кодирования
