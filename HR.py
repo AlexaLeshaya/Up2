@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-st.title('👀 EqualGuard AI - Прогнозирование оттока сотрудников компании')
+st.title('👀Прогнозирование оттока сотрудников компании')
 
 # Загрузка данных
 with st.expander('Исходные данные'):
